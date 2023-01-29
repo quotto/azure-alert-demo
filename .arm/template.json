@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "metricAlerts_Http4xxWarning_name": {
+            "defaultValue": "Http4xxWarning",
+            "type": "String"
+        },
+        "target_function_id": {
+            "type": "String"
+        },
+        "actionGroups_SlackWebhook_name": {
+            "defaultValue": "SlackWebhook",
+            "type": "String"
+        },
+        "webhook_function_id": {
+            "type": "String"
+        },
+        "webhook_function_trigger_url": {
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2022-06-01",
+            "name": "[parameters('actionGroups_SlackWebhook_name')]",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "[parameters('actionGroups_SlackWebhook_name')]",
+                "enabled": true,
+                "emailReceivers": [],
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "eventHubReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": [
+                    {
+                        "name": "webhook",
+                        "functionAppResourceId": "[parameters('webhook_function_id')]",
+                        "functionName": "HttpTrigger1",
+                        "httpTriggerUrl": "[parameters('webhook_function_trigger_url')]",
+                        "useCommonAlertSchema": true
+                    }
+                ],
+                "armRoleReceivers": []
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Http4xxWarning_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('target_function_id')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT5M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.Web/sites",
+                            "metricName": "Http4xx",
+                            "operator": "greaterthan",
+                            "timeAggregation": "count",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.Web/sites",
+                "targetResourceRegion": "japaneast",
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_SlackWebhook_name'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        }
+    ]
+}
