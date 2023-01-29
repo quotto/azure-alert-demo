@@ -25,11 +25,10 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    - name: Deploy ARM Template
-      uses: azure/arm-deploy@v1
-      id: deploy
+        
+    - name: Azure CLI script
+      uses: azure/CLI@v1
       with:
-        resourceGroupName: "quotto-demo-rg"
-        deploymentName: "alertDeploy"
-        template: ./"${{ env.ARMTEMPLATE_PATH }}"/template.json
-        parameters: target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
+        azcliversion: 2.0.72
+        inlineScript: |
+            az deployment create --name DemoAlert --resource-group quotto-demo-rg --template-file ./arm/template.json --parameters target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
