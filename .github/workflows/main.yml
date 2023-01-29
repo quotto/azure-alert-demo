@@ -37,7 +37,6 @@ jobs:
       id: deploy
       with:
         scope: resourcegroup
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.RESOURCEGROUPNAME }}
         template: ./"${{ env.ARMTEMPLATE_PATH }}"/arm-template.json
         parameters: target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
