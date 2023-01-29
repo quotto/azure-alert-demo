@@ -31,4 +31,4 @@ jobs:
       with:
         azcliversion: 2.44.1
         inlineScript: |
-            az deployment group create --name DemoAlert --resource-group quotto-demo-rg --template-file ./arm/template.json --parameters target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
+            az deployment group create --name DemoAlert --resource-group quotto-demo-rg --template-file .arm/template.json --parameters target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
