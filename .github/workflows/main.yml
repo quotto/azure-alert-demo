@@ -8,15 +8,8 @@ permissions:
   id-token: write
 
 env:
-  APPNAME: ${{ github.actor }}-demo-functions
-  APPLICATIONPATH: app
   ARMTEMPLATE_PATH: .arm
   RESOURCEGROUPNAME: ${{ github.actor }}-demo-rg
-  LOCATION: Japan East
-  HOSTINGPLAN: ${{ github.actor }}-demo
-  STORAGEACCOUNTNAME: ${{ github.actor }}demo
-  APPINSIGHTSLOCATION: Japan East
-  SKU: Dynamic Y1
 
 jobs:
   build:
@@ -36,7 +29,6 @@ jobs:
       uses: azure/arm-deploy@v1
       id: deploy
       with:
-        scope: resourcegroup
-        resourceGroupName: ${{ env.RESOURCEGROUPNAME }}
+        resourceGroupName: "quotto-demo-rg"
         template: ./"${{ env.ARMTEMPLATE_PATH }}"/template.json
         parameters: target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
