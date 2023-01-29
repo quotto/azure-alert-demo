@@ -30,5 +30,6 @@ jobs:
       id: deploy
       with:
         resourceGroupName: "quotto-demo-rg"
+        deploymentName: "alertDeploy"
         template: ./"${{ env.ARMTEMPLATE_PATH }}"/template.json
         parameters: target_function_id="${{ secrets.TARGET_FUNCTION_ID }}" webhook_function_id="${{ secrets.WEBHOOK_FUNCTION_ID }}" webhook_function_trigger_url="${{ secrets.WEBHOOK_FUNCTION_TRIGGER_URL }}"
